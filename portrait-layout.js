@@ -1,0 +1,14 @@
+// Compact portrait uses contextual sub-tabs; landscape keeps the existing full dashboard.
+const portraitViews={home:[['today','Hôm nay'],['history','Nhật ký'],['week','Tổng kết tuần']],meals:[['foods','Thực phẩm'],['suggest','Gợi ý'],['diary','Nhật ký']],workouts:[['journal','Buổi tập'],['library','Thư viện']],progress:[['weight','Cân nặng'],['goals','Mục tiêu'],['measure','Số đo']]};
+const panelSelections={home:'today',meals:'foods',workouts:'journal',progress:'weight'};
+const panel=(node,key)=>{if(node)node.dataset.compactPanel=key};
+const home=$('home');panel($('dateNav'),'today');panel(home.querySelector('.calorie-card'),'today');panel(home.querySelector('.stats-grid'),'today');panel($('workoutCount').closest('.card'),'history');panel($('recentMeals').closest('.card'),'history');panel($('homeWeightChart').closest('.card'),'history');panel(document.querySelector('.weekly-card'),'week');
+panel($('mealTotal').closest('.card'),'diary');panel($('foodSearch').closest('.card'),'foods');panel(document.querySelector('.smart-card'),'suggest');panel($('mealGroups'),'diary');
+panel($('workoutTotal').closest('.card'),'journal');panel($('workoutList'),'journal');panel($('exerciseList').closest('.card'),'journal');panel(document.querySelector('.exercise-library'),'library');
+panel($('weightNow').closest('.card'),'weight');panel($('weightChart').closest('.card'),'weight');panel($('weightForm'),'weight');panel($('bodyGoals'),'goals');panel(document.querySelector('.manual-goals'),'goals');panel($('measureForm'),'measure');
+function setCompactPanel(page,key){panelSelections[page]=key;const root=$(page);for(const node of root.querySelectorAll(':scope > [data-compact-panel]'))node.classList.toggle('compact-inactive',node.dataset.compactPanel!==key);for(const tab of root.querySelectorAll('.compact-tabs button')){const active=tab.dataset.panel===key;tab.classList.toggle('active',active);tab.setAttribute('aria-pressed',String(active))}}
+for(const [page,views] of Object.entries(portraitViews)){const root=$(page),tabs=document.createElement('nav');tabs.className='compact-tabs';tabs.setAttribute('aria-label','Mục trong '+page);for(const [key,label] of views){const b=document.createElement('button');b.type='button';b.dataset.panel=key;b.textContent=label;b.onclick=()=>{setCompactPanel(page,key);window.scrollTo({top:0,behavior:'instant'})};tabs.append(b)}const heading=root.querySelector('.page-heading');heading.after(tabs);if(page==='home')tabs.after($('dateNav'));setCompactPanel(page,panelSelections[page])}
+// Selecting an exercise from the library must reveal the journal before scrolling.
+const chooseBeforePortrait=chooseLibraryExercise;chooseLibraryExercise=function(entry){setCompactPanel('workouts','journal');chooseBeforePortrait(entry)};
+// The Overview date selector stays available for all Overview subviews.
+$('dateNav').removeAttribute('data-compact-panel');$('dateNav').classList.remove('compact-inactive');

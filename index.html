@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101a17">
+<meta name="description" content="FitTrack – theo dõi calo, bữa ăn, tập luyện, nước uống và tiến trình cá nhân.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FitTrack">
+<title>FitTrack – Fitness Tracker</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+ <a class="brand" href="#" aria-label="FitTrack trang chủ"><span class="brandmark">✳</span><span><b>FitTrack</b><small>PERSONAL FITNESS</small></span></a>
+ <div class="top-actions"><select id="layoutMode" aria-label="Bố cục"><option value="auto">Auto</option><option value="portrait">Dọc</option><option value="landscape">Ngang</option></select><button id="themeBtn" class="icon-btn" aria-label="Đổi giao diện">◐</button></div>
+</header>
+<nav class="tabs" aria-label="Điều hướng">
+ <button class="tab active" data-page="home"><span class="tab-icon home-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11 12 3l9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" fill="currentColor"/><path d="M9 14h6" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>Tổng quan</span></button>
+ <button class="tab" data-page="meals"><span class="tab-icon meals-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 7c-3-4-8-3-9 2-1 5 3 11 6 11 2 0 2-1 3-1s2 1 3 1c3 0 7-6 6-11-1-5-6-6-9-2z" fill="currentColor"/><path d="M12 6c0-3 2-5 5-5-1 3-2 4-5 5" fill="#8bdc90"/><path d="M7 9c-1 1-1 2-1 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></span><span>Dinh dưỡng</span></button>
+ <button class="tab" data-page="workouts"><span class="tab-icon workouts-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="1" y="7" width="5" height="10" rx="2" fill="currentColor"/><rect x="18" y="7" width="5" height="10" rx="2" fill="currentColor"/><rect x="6" y="10" width="12" height="4" rx="1" fill="currentColor"/><path d="M3.5 10v4m17-4v4" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg></span><span>Tập luyện</span></button>
+ <button class="tab" data-page="progress"><span class="tab-icon progress-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="15" width="4" height="6" rx="1" fill="currentColor" opacity=".55"/><rect x="10" y="10" width="4" height="11" rx="1" fill="currentColor" opacity=".8"/><rect x="17" y="5" width="4" height="16" rx="1" fill="currentColor"/><path d="m3 11 6-4 4 1 7-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Tiến trình</span></button>
+ <button class="tab" data-page="settings"><span class="tab-icon settings-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m10 2 4 0 .8 3 2 .9 2.8-1.4 2 3.5-2 2.2v2.5l2 2.3-2 3.5-2.8-1.4-2 .9-.8 3h-4l-.8-3-2-.9-2.8 1.4-2-3.5 2-2.3v-2.5l-2-2.2 2-3.5L7.2 6l2-.9z" fill="currentColor"/><circle cx="12" cy="12" r="3.5" fill="var(--surface)"/></svg></span><span>Cài đặt</span></button>
+</nav>
+<main>
+<section id="home" class="page active">
+<section id="dateNav" class="card date-nav" aria-label="Lịch theo dõi"><div class="section-title"><button type="button" id="prevWeek" class="icon-btn" aria-label="Tuần trước">‹</button><div><strong id="dateSelected"></strong><small id="dateStatus" class="muted"></small></div><button type="button" id="nextWeek" class="icon-btn" aria-label="Tuần sau">›</button></div><div id="weekDays" class="week-days"></div><div class="date-actions"><button class="btn" id="backToday">Hôm nay</button><label>Chọn ngày<input type="date" id="calendarDate"></label></div></section>
+ <div class="page-heading"><div><p class="eyebrow" id="todayLabel"></p><h1>Tổng quan</h1></div><span class="pill">DAILY ACTIVITY</span></div>
+ <div class="card calorie-card">
+  <div class="calorie-main"><div><p class="muted">Calo còn lại</p><strong class="big-number" id="remaining">2.000</strong><p class="muted">kcal · mục tiêu <span id="goalLabel">2.000</span></p></div>
+   <div class="ring" id="calorieRing"><div><b id="ringPct">0%</b><small>đã nạp</small></div></div>
+  </div>
+  <div class="calorie-stats"><div><span>Đã nạp</span><b id="eaten">0 kcal</b></div><div><span>Đã tiêu hao</span><b id="burned">0 kcal</b></div></div>
+ </div>
+ <div class="stats-grid">
+  <article class="card mini-stat"><span>🥩 Protein</span><b id="protein">0g</b><small>Mục tiêu 120g</small><div class="progress"><i id="pbar"></i></div></article>
+  <article class="card mini-stat"><span>🍚 Carbs</span><b id="carbs">0g</b><small>Mục tiêu 220g</small><div class="progress"><i id="cbar"></i></div></article>
+  <article class="card mini-stat"><span>🥑 Fat</span><b id="fat">0g</b><small>Mục tiêu 65g</small><div class="progress"><i id="fbar"></i></div></article>
+  <article class="card mini-stat"><span>💧 Nước uống</span><b id="water">0 ml</b><small>Mục tiêu <span id="waterGoalLabel">2.500</span> ml</small><div class="progress"><i id="wbar"></i></div></article>
+ </div>
+ <div class="card">
+  <div class="section-title"><h2>Hoạt động trong ngày</h2><span class="muted">Tóm tắt</span></div>
+  <div class="list-row"><span>🏃 Bài tập hoàn thành</span><b id="workoutCount">0 bài</b></div>
+  <div class="list-row"><span>🔥 Calo vận động</span><b id="homeBurn">0 kcal</b></div>
+  <div class="list-row"><span>⚖️ Cân nặng gần nhất</span><b id="homeWeight">Chưa nhập</b></div>
+ </div>
+ <div hidden><button class="btn" id="quickWater" hidden>＋ 250ml nước</button></div>
+ <div class="quick-actions" hidden><button class="btn" id="scanMeal" hidden>Scan Meal</button><button class="btn" id="barcode" hidden>Barcode</button><button class="btn" id="manualMeal" hidden>＋ Nhập món thủ công</button></div>
+ <div class="card smart-card"><div class="section-title"><h2>Smart Food Suggestions</h2><span class="pill">MACROS</span></div><p class="muted" id="suggestNote">Gợi ý theo mục tiêu hằng ngày</p><div id="suggestTabs" class="suggest-tabs"></div><div id="suggestions"></div></div>
+ <div class="card"><div class="section-title"><h2>Bữa ăn trong ngày</h2><button class="btn" data-go="meals">Xem chi tiết</button></div><div id="recentMeals"></div></div>
+ <div class="card"><div class="section-title"><h2>Lịch sử cân nặng</h2><button class="btn" data-go="progress">Tiến trình</button></div><p class="muted">Cân nặng gần nhất</p><strong class="big-number" id="homeWeightNow">-- kg</strong><div id="homeWeightChart" class="chart"></div></div>
+</section>
+<section id="meals" class="page">
+ <div class="page-heading"><div><p class="eyebrow">FOOD DIARY</p><h1>Nhật ký dinh dưỡng</h1></div><button class="btn primary" id="addMeal">＋ Thêm món</button></div>
+ <div class="card"><p class="muted">TỔNG NĂNG LƯỢNG NẠP</p><strong class="big-number" id="mealTotal">0 kcal</strong></div>
+ <div class="card"><h2>Log Meal</h2><p class="muted">Bạn đang ăn gì?</p><input id="foodSearch" type="search" placeholder="Tìm thực phẩm…"><div id="mealTypes" class="quick-actions"></div><h2>Gần đây</h2><div id="foodRecent"></div><h2>Thư viện thực phẩm</h2><div id="foodLibrary"></div></div>
+ <div id="mealGroups"></div>
+</section>
+<section id="workouts" class="page">
+ <div class="page-heading"><div><p class="eyebrow">ACTIVITY LOG</p><h1>Tập luyện</h1></div><button class="btn primary" id="addWorkout">＋ Thêm bài tập</button></div>
+ <div class="card"><p class="muted">TỔNG CALO TIÊU HAO</p><strong class="big-number" id="workoutTotal">0 kcal</strong><p class="muted" id="workoutMinutes">0 phút tập luyện</p></div>
+ <div id="workoutList"></div>
+ <div class="card"><h2>Nhật ký tập luyện</h2><p id="workoutLogDate" class="muted"></p><input type="date" id="trainingDate" hidden><div id="muscleGroups" class="quick-actions" hidden></div><div class="section-title"><h2 id="muscleTitle">Bài tập đã ghi</h2><button id="restTimer" class="btn">⏱ 01:30</button></div><div id="exerciseList"></div></div>
+</section>
+<section id="progress" class="page">
+ <div class="page-heading"><div><p class="eyebrow">YOUR JOURNEY</p><h1>Tiến trình cơ thể</h1></div></div>
+ <form id="bodyGoals" class="card form-stack"><h2>Body Goals · Mục tiêu vóc dáng</h2><p class="muted">Ước tính dành cho người trưởng thành khỏe mạnh từ 19 tuổi, không phải chỉ định y tế.</p><div class="goal-grid"><label>Tuổi<input name="age" type="number" min="19" max="78" required></label><label>Chiều cao (cm)<input name="height" type="number" min="130" max="230" required></label><label>Cân nặng (kg)<input name="weight" type="number" min="40" max="200" step="0.1" required></label><label>Giới tính theo công thức<select name="sex"><option value="male">Nam</option><option value="female">Nữ</option></select></label></div><label>Mức vận động<select name="activity"><option value="1.2">Ít vận động</option><option value="1.375">Nhẹ · 1–3 buổi/tuần</option><option value="1.55" selected>Vừa · 3–5 buổi/tuần</option><option value="1.725">Nhiều · 6–7 buổi/tuần</option></select></label><label>Mục tiêu<select name="goal"><option value="maintain">Duy trì</option><option value="gain">Tăng cân</option><option value="muscle">Tăng cơ</option><option value="lose">Giảm cân</option><option value="fat">Giảm mỡ, giữ cơ</option><option value="recomp">Tái cấu trúc cơ thể</option></select></label><button class="btn primary">Tính mục tiêu đề xuất</button><div id="goalResult" aria-live="polite"></div><button type="button" id="applyGoals" class="btn primary" hidden>Áp dụng mục tiêu vào Dashboard</button></form>
+ <div class="card"><p class="muted">CÂN NẶNG GẦN NHẤT</p><strong class="big-number" id="weightNow">-- kg</strong><p class="muted">Mục tiêu <span id="weightGoalText">--</span> kg</p></div>
+ <div class="card"><div class="section-title"><h2>Lịch sử cân nặng</h2><span class="muted">10 lần gần nhất</span></div><div id="weightChart" class="chart"></div></div>
+ <form id="weightForm" class="card form-stack"><h2>Cập nhật cân nặng</h2><label>Cân nặng (kg)<input required name="weight" type="number" min="20" max="350" step="0.1" placeholder="Ví dụ: 68.5"></label><label>Ngày ghi nhận<input name="date" type="date" required></label><button class="btn primary">Lưu cân nặng</button></form>
+ <form id="measureForm" class="card form-stack"><h2>Số đo cơ thể (cm)</h2><label>Eo<input name="waist" type="number" min="1" max="300" step="0.1" required></label><label>Ngực<input name="chest" type="number" min="1" max="300" step="0.1"></label><label>Hông<input name="hip" type="number" min="1" max="300" step="0.1"></label><button class="btn primary">Lưu số đo</button><div id="measureHistory"></div></form>
+</section>
+<section id="settings" class="page">
+ <div class="page-heading"><div><p class="eyebrow">PREFERENCES</p><h1>Cài đặt cá nhân</h1></div></div>
+ <form id="settingsForm" class="card form-stack">
+  <h2>Mục tiêu hằng ngày</h2>
+  <label>Mục tiêu calo (kcal)<input name="calorieGoal" type="number" min="500" max="10000" required></label>
+  <label hidden>Mục tiêu nước (ml)<input name="waterGoal" type="number" min="250" max="10000" required></label>
+  <div class="goal-grid"><label>Protein (g)<input name="proteinGoal" type="number" min="1" max="400" required></label><label>Carbs (g)<input name="carbGoal" type="number" min="1" max="1000" required></label><label>Fat (g)<input name="fatGoal" type="number" min="1" max="350" required></label></div>
+  <label>Mục tiêu cân nặng (kg)<input name="weightGoal" type="number" min="20" max="350" step="0.1"></label>
+  <button class="btn primary">Lưu cài đặt</button>
+ </form>
+ <div class="card form-stack"><h2>Sao lưu dữ liệu</h2><p class="muted">Dữ liệu chỉ nằm trong bộ nhớ trình duyệt trên thiết bị này. Hãy xuất bản sao lưu định kỳ, nhất là trước khi xóa lịch sử Safari hoặc đổi điện thoại.</p><button class="btn" id="exportBtn">↓ Xuất dữ liệu JSON</button><label class="btn file-button">↑ Nhập bản sao lưu JSON<input type="file" id="importFile" accept="application/json"></label><button class="btn danger" id="resetBtn">Xóa toàn bộ dữ liệu</button></div>
+ <div class="card"><h2>Về FitTrack</h2><p class="muted">FitTrack PWA 1.0 · Hoạt động ngoại tuyến sau lần tải đầu tiên. Không có tài khoản hoặc đồng bộ đám mây trong phiên bản Local.</p><p class="muted small">AI nhận diện món ăn và Apple Health chưa được kết nối trong bản này.</p></div>
+</section>
+</main>
+<div class="modal-backdrop" id="modal" hidden><form class="modal card" id="entryForm"><div class="section-title"><h2 id="modalTitle">Thêm dữ liệu</h2><button type="button" class="icon-btn" id="closeModal">✕</button></div><div id="modalFields" class="form-stack"></div><button class="btn primary">Lưu dữ liệu</button></form></div>
+<div class="toast" id="toast" role="status"></div>
+<script src="app.js"></script>
+<script src="v2.js"></script>
+<script src="nutrition.js"></script>
+<script src="refinement.js"></script>
+<script src="calendar.js"></script>
+<script src="exercise-library.js"></script>
+<script src="workout-journal.js"></script>
+<script src="weekly-summary.js"></script>
+<script src="rest-days.js"></script>
+<script src="portrait-layout.js"></script>
+</body></html>
